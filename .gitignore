@@ -1,0 +1,27 @@
+# Secrets — never commit
+.env
+.env.local
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Test / coverage artefacts
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# DB files
+*.db
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
