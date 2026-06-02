@@ -24,6 +24,11 @@ class Settings(BaseSettings):
     rate_limit_requests: int = 60
     rate_limit_window_seconds: int = 60
 
+    # File logging (optional — stdout only when log_file is unset)
+    log_file: str | None = None
+    log_max_bytes: int = 10 * 1024 * 1024  # 10 MB
+    log_backup_count: int = 5
+
     telegram: TelegramSettings = TelegramSettings()
 
     model_config = SettingsConfigDict(

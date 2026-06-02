@@ -25,6 +25,44 @@ class TestLoggingConfig:
         root = logging.getLogger()
         assert root.level == logging.INFO
 
+    def test_file_handler_added_when_log_file_set(self, tmp_path):
+        from logging.handlers import RotatingFileHandler
+        log_file = str(tmp_path / "test.log")
+        settings = Settings(environment="development", log_file=log_file)
+        configure_logging(settings)
+        root = logging.getLogger()
+        handler_types = [type(h) for h in root.handlers]
+        assert RotatingFileHandler in handler_types
+
+    def test_file_handler_respects_rotation_settings(self, tmp_path):
+        from logging.handlers import RotatingFileHandler
+        log_file = str(tmp_path / "sub" / "app.log")
+        settings = Settings(
+            environment="development",
+            log_file=log_file,
+            log_max_bytes=1024,
+            log_backup_count=3,
+        )
+        configure_logging(settings)
+        root = logging.getLogger()
+        file_handler = next(h for h in root.handlers if isinstance(h, RotatingFileHandler))
+        assert file_handler.maxBytes == 1024
+        assert file_handler.backupCount == 3
+
+    def test_parent_dirs_created_for_log_file(self, tmp_path):
+        log_file = str(tmp_path / "nested" / "dir" / "app.log")
+        settings = Settings(environment="development", log_file=log_file)
+        configure_logging(settings)
+        from pathlib import Path
+        assert Path(log_file).parent.exists()
+
+    def test_no_file_handler_when_log_file_not_set(self):
+        from logging.handlers import RotatingFileHandler
+        settings = Settings(environment="development", log_file=None)
+        configure_logging(settings)
+        root = logging.getLogger()
+        assert not any(isinstance(h, RotatingFileHandler) for h in root.handlers)
+
 
 class TestBatchSendResultProperties:
     def test_total(self):
