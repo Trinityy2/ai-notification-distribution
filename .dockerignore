@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+
+# Test / coverage artefacts
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# Secrets / local config
+.env
+.env.local
+
+# Logs and data
+logs/
+*.db
+*.db-shm
+*.db-wal
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/

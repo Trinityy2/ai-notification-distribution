@@ -119,6 +119,28 @@ uvicorn app.main:app --host 0.0.0.0  # production (set ENVIRONMENT=production)
 
 Interactive docs are available at `http://localhost:8000/docs` (development only).
 
+### Running with Docker
+
+```bash
+# Copy and configure secrets
+cp .env.example .env
+# Edit .env — set ADMIN_ROOT_KEY, POSTGRES_PASSWORD, TELEGRAM__BOT_TOKEN, etc.
+
+# Build and start (app + Postgres)
+docker compose up -d
+
+# View logs
+docker compose logs -f app
+```
+
+**Persistent volumes created automatically:**
+
+| Volume | Mounted at | Contains |
+|--------|-----------|----------|
+| `logs` | `/app/logs` | Rotating log files |
+| `data` | `/app/data` | SQLite db (if using aiosqlite backend) |
+| `postgres_data` | *(postgres container)* | Postgres data directory |
+
 ---
 
 ## Configuration
