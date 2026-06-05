@@ -2,7 +2,6 @@ import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
-from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import Settings, get_settings
@@ -69,9 +68,6 @@ def create_app(settings: "Settings | None" = None) -> FastAPI:
     app.state.settings = _settings
 
     # ── Middleware ──────────────────────────────────────────────────────────────
-
-    if _settings.environment == "production":
-        app.add_middleware(HTTPSRedirectMiddleware)
 
     @app.middleware("http")
     async def limit_body_size(request: Request, call_next):
