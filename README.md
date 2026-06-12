@@ -124,9 +124,9 @@ Interactive docs are available at `http://localhost:8000/docs` (development only
 ```bash
 # Copy and configure secrets
 cp .env.example .env
-# Edit .env — set ADMIN_ROOT_KEY, POSTGRES_PASSWORD, TELEGRAM__BOT_TOKEN, etc.
+# Edit .env — set ADMIN_ROOT_KEY, TELEGRAM__BOT_TOKEN, etc.
 
-# Build and start (app + Postgres)
+# Build and start
 docker compose up -d
 
 # View logs
@@ -138,8 +138,7 @@ docker compose logs -f app
 | Volume | Mounted at | Contains |
 |--------|-----------|----------|
 | `logs` | `/app/logs` | Rotating log files |
-| `data` | `/app/data` | SQLite db (if using aiosqlite backend) |
-| `postgres_data` | *(postgres container)* | Postgres data directory |
+| `data` | `/app/data` | SQLite database file |
 
 ---
 
