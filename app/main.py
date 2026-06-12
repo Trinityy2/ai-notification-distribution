@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 
 from app.config import Settings, get_settings
 from app.container import Container
@@ -68,6 +69,15 @@ def create_app(settings: "Settings | None" = None) -> FastAPI:
     app.state.settings = _settings
 
     # ── Middleware ──────────────────────────────────────────────────────────────
+
+    # Force HTTP→HTTPS in production. We do this at the app level because there is
+    # currently no TLS-terminating reverse proxy in front of the service.
+    # NOTE: If a reverse proxy (nginx, ALB, Cloud Run, etc.) is ever added to
+    # terminate TLS, REMOVE this — the proxy forwards plain HTTP internally and
+    # this middleware will cause redirect loops / broken health checks unless
+    # X-Forwarded-Proto is handled. See README "Security Notes".
+    if _settings.environment == "production":
+        app.add_middleware(HTTPSRedirectMiddleware)
 
     @app.middleware("http")
     async def limit_body_size(request: Request, call_next):

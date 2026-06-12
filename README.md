@@ -239,4 +239,4 @@ That's it — no changes to any router or auth logic required.
 - `SecretStr` is used for all sensitive config values — they never appear in logs or tracebacks
 - Request body size is capped at 64 KB
 - OpenAPI docs (`/docs`, `/openapi.json`) are disabled in production
-- HTTPS redirect middleware is enabled in production
+- HTTPS redirect middleware is enabled in production (app-level, since there is no TLS-terminating reverse proxy). **If you add a reverse proxy that terminates TLS, remove `HTTPSRedirectMiddleware` in `app/main.py` to avoid redirect loops.**
